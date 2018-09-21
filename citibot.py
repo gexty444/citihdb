@@ -20,6 +20,7 @@ citizenship2 = None
 scheme = None
 
 funds = None
+tenure = None
 joint2 = None
 income1 = None
 com1 = None
@@ -72,7 +73,7 @@ not exceed 6 000. Additionally, You are eligible to purchase a new <b>Executive 
 income does not exceed 14 000. \n\nFor the above three types of flats, Do make sure that You do not own other properties overseas or locally, and have not \
 disposed of any within the last 30 months You have not purchased a new HDB/ DBSS flat or EC, or received a CPF Housing Grant before; or, have only \
 purchased 1 of those properties/ received 1 CPF Housing Grant thus far. \n\nLastly, You are also eligible to purchase a <b>resale flat</b>, however You must dispose of any HDB \
-flat or private property you own within 6 months of the resale flat purchase. "
+flat or private property you own within 6 months of the resale flat purchase."
 
 
 
@@ -361,17 +362,23 @@ def assessing(chat_id):
 	global scheme
 	if citizenship1=="Singaporean" and (mstatus=="Single" or mstatus=="Widowed" or mstatus=="Divorced"):
 		scheme = "ssc"
+		text = "The maximum amount of grant available for you is 40 000. To find out more about the grants available for your scheme, visit https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/schemes-and-grants/cpf-housing-grants-for-hdb-flats/single-singapore-citizen-scheme"
 		bot.send_message(chat_id, ssc, reply_markup=mark,parse_mode="HTML")
+		bot.send_message(chat_id, text)
 		bot.send_message(chat_id, "If you would like me to do other things for you, just enter '/start'! :)")
 
 	elif citizenship1==citizenship2=="Singaporean" and joint=="Joint (Not Married)":
 		scheme = "jss"
+		text = " The maximum amount of grant available for you is 80 000. To find out more about the grants available for your scheme, visit https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/joint-singles-scheme-or-orphans-scheme"
 		bot.send_message(chat_id, jss, reply_markup=mark,parse_mode="HTML")
+		bot.send_message(chat_id, text)
 		bot.send_message(chat_id, "If you would like me to do other things for you, just enter '/start'! :)")
 
 	elif citizenship1=="Singaporean" and citizenship2=="Foreigner" and joint=="Joint (Married)":
 		scheme = "ncs"
+		text = "The maximum amount of grants available for you is 40 000. To find out more about the grants available for your scheme, visit https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/non-citizen-spouse-scheme"
 		bot.send_message(chat_id, ncs, reply_markup=mark, parse_mode="HTML")
+		bot.send_message(chat_id, text)
 		bot.send_message(chat_id, "If you would like me to do other things for you, just enter '/start'! :)")
 
 	elif citizenship1==citizenship2=="Permanent Resident" and joint=="Joint (Fiance/Fiancee)":
@@ -393,13 +400,17 @@ def assessing(chat_id):
 	elif (citizenship1==citizenship2=="Singaporean" and joint=="Joint (Married)") \
 	or (citizenship1=="Singaporean" and citizenship2=="Permanent Resident" and joint=="Joint (Married)"):
 		scheme = "public"
+		text = "The maximum amount of grants available for you is 80 000. To find our more about the grants available for your scheme, visit visit https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants"
 		bot.send_message(chat_id, allok , reply_markup=mark,parse_mode="HTML")
+		bot.send_message(chat_id, text)
 		bot.send_message(chat_id, "If you would like me to do other things for you, just enter '/start'! :)")
 
 	elif (citizenship1=="Singaporean" and citizenship2=="Permanent Resident" and joint=="Joint (Fiance/Fiancee)") \
 	or (citizenship1=="Permanent Resident" and citizenship2=="Singaporean" and joint=="Joint (Married)"):
 		scheme = "public"
+		text = "The maximum amount of grants available for you is 80 000. To find our more about the grants available for your scheme, visit visit https://www.hdb.gov.sg/cs/infoweb/residential/buying-a-flat/new/first-timer-applicants"
 		bot.send_message(chat_id, allok , reply_markup=mark,parse_mode="HTML")
+		bot.send_message(chat_id, text)
 		bot.send_message(chat_id, "If you would like me to do other things for you, just enter '/start'! :)")
 
 	else:
