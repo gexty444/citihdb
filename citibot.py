@@ -507,20 +507,32 @@ def whatcom(message):
 		income1 = int(message.text)
 		msg = bot.send_message(chat_id, "What is your monthly financial commitments and living expenses? (Eg. Car loans, credit card loans, personal loans.)\
 			\n\nPlease enter a whole number")
-		bot.register_next_step_handler(msg, assess_afford)
+		bot.register_next_step_handler(msg, whattenure)
 	else:
 		msg = bot.send_message(chat_id, "I am sorry, I didn't quite catch that... Please try again")
 		bot.register_next_step_handler(msg, whatcom)
+		
+def whattenure(message):
+	chat_id = message.chat.id
+	bot.send_chat_action(chat_id, 'typing')
+	if message.text.isdigit():
+		global com1
+		com1 = int(message.text)
+		msg = bot.send_message(chat_id, "What is your preferred loan tenure? (max 25 years)\n\nPlease enter a whole number")
+		bot.register_next_step_handler(msg, assess_afford)
+	else:
+		msg = bot.send_message(chat_id, "I am sorry, I didn't quite catch that... Please try again")
+		bot.register_next_step_handler(msg, whattenure)
 
 def assess_afford(message):
 	chat_id = message.chat.id
 	bot.send_chat_action(chat_id, 'typing')
 	if message.text.isdigit():
-		global com1
+		global tenure
+		tenure = int(message.text)
 		global affordability
-		com1 = int(message.text)
 		if joint2 == "On my own":
-			affordability = assessing_afford(chat_id)
+			affordability = assessing_afford(chat_id,tenure)
 			bot.send_message(chat_id, "Your maximum affordability calculated is ${}.\
 				For a better reflection of your affordability, do consult a bank regarding loans available for you :)".format(affordability))
 			bot.send_message(chat_id, "If you would like me to do other things for you, just enter '/start'! :)")
@@ -532,14 +544,14 @@ def assess_afford(message):
 		msg = bot.send_message(chat_id, "I am sorry, I didn't quite catch that... Please try again")
 		bot.register_next_step_handler(msg, assess_afford)
 
-def assessing_afford(chat_id):
+def assessing_afford(chat_id,tenure):
 	# To calculate max affordability, we take the smaller of the two values calculated. The first value is obtained via the assumption of 
 	# 30% Mortage Servicing Ratio. The second value is obtained via the assumption of 75% Loan to Value ratio. 
 	if joint2 == "On my own":
-		value_1 = (income1 - com1)*12*25*0.3 + funds
+		value_1 = (income1 - com1)*12*tenure*0.3 + funds
 		value_2 = funds/2.5*10
 	elif joint2 == "With a partner":
-		value_1 = (income1 + income2 - com1 - com2)*12*25*0.3 + funds + funds2
+		value_1 = (income1 + income2 - com1 - com2)*12*tenure*0.3 + funds + funds2
 		value_2 = (funds+funds2)/2.5*10
 	final = min(value_1,value_2)
 	return int(final)
@@ -578,7 +590,7 @@ def assess_afford2(message):
 		global com2
 		global affordability
 		com2 = int(message.text)
-		affordability = assessing_afford(chat_id)
+		affordability = assessing_afford(chat_id,tenure)
 		bot.send_message(chat_id, "Your maximum affordability calculated is ${}.\
 				For a better reflection of your affordability, do consult a bank regarding loans available for you :)".format(affordability))
 		bot.send_message(chat_id, "If you would like me to do other things for you, just enter '/start'! :)")
